@@ -1,7 +1,10 @@
-/docker-schedule-simula/
+#目录
+/target/
+/.settings/
+/.git
+
+#文件
 .classpath
 .project
 .settings
-.git
-.class
-target
+.*.swp
