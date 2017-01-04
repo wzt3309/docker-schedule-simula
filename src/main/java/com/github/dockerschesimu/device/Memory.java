@@ -24,15 +24,10 @@ public class Memory {
 	}
 	public Memory(){
 		this(Device.DEFAULT_MEM_TOTAL);
-	}
+	}	
 	public Memory(int total){
-		this(total,0);
-	}
-	public Memory(int total,int used){
 		this.total=total;
-		this.used=used;
-		this.free=this.total;
-		this.use=0F;
+		
 	}
 	//-------------------------------------------对象方法区-------------------------------------//
 	/**
@@ -44,6 +39,18 @@ public class Memory {
 		if(!BaseValidate.noMoreThan(free, used))
 			throw new MemoryOverFlowError();
 		this.used+=used;
+		this.free=this.total-this.used;
+		this.use=(this.used+1.0F)/(this.total+1.0F)*100;
+	}
+	/**
+	 * 任务开始前，设定内存使用情况
+	 * @param used
+	 * @throws MemoryOverFlowError
+	 */
+	public void initMEM(int used) throws MemoryOverFlowError{
+		if(!BaseValidate.noMoreThan(total, used))
+			throw new MemoryOverFlowError();
+		this.used=used;
 		this.free=this.total-this.used;
 		this.use=(this.used+1.0F)/(this.total+1.0F)*100;
 	}

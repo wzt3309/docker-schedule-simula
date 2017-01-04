@@ -10,7 +10,7 @@ public class MemoryTest {
 
 	private Memory mem=new Memory();
 	
-	@Test
+	//@Test
 	public void testSetUsed() throws MemoryOverFlowError {
 		int used=1500000,total=mem.getTotal(),free;
 		float use=0F;
@@ -26,6 +26,7 @@ public class MemoryTest {
 
 	@Test
 	public void testShow() throws MemoryOverFlowError {
+		mem.initMEM(160000);
 		mem.show();
 		mem.malloc(1600);
 		mem.show();
