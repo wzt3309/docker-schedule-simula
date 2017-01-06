@@ -2,5 +2,6 @@ package com.github.dockerschesimu.algorithm;
 
 public interface FitnessFunction {
 
-	public double fitness(boolean[] gene);
+	public double fitness(int[] taskList);
+	public boolean canBeParent(int[] taskList);
 }

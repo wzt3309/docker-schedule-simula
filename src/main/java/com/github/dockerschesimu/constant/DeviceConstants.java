@@ -1,6 +1,6 @@
 package com.github.dockerschesimu.constant;
 
-public class Device {
+public class DeviceConstants {
 
 	//-------------------------------cpu/core相关常量-------------------------------//
 	public static final float DEFAULT_CORE_FREQUENCY=2.00F;		//默认核心主频2.00GHz

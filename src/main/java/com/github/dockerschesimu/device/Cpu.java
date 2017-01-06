@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.dockerschesimu.constant.Device;
+import com.github.dockerschesimu.constant.DeviceConstants;
 import com.github.dockerschesimu.error.device.CoreIsNotInitError;
 import com.github.dockerschesimu.error.device.SetCoreUseError;
 import com.github.dockerschesimu.error.device.SetCoreUseOverMaxError;
@@ -79,22 +79,22 @@ public class Cpu {
 	
 	//-------------------------------------------初始化区-------------------------------------------//
 	{
-		this.uuid=BaseUUID.uuid(Device.IDENTIFI_CPU);
-		this.nickname=BaseUUID.randomstr(Device.CPU_NICKNAME_LENGTH);
+		this.uuid=BaseUUID.uuid(DeviceConstants.IDENTIFI_CPU);
+		this.nickname=BaseUUID.randomstr(DeviceConstants.CPU_NICKNAME_LENGTH);
 	}
 	/**
 	 * 默认cpu 
 	 * 6核12线程 2.00GHz
 	 */
 	public Cpu(){
-		this(Device.DEFAULT_CPU_CORENUM);
+		this(DeviceConstants.DEFAULT_CPU_CORENUM);
 	}
 	/**
 	 * 设定cpu核数n 
 	 * n核2*n线程 2.00GHz
 	 */
 	public Cpu(int coreNum){
-		this(coreNum,Device.DEFAULT_CPU_HYPERTHREAD);//默认一个核心模拟两个线程
+		this(coreNum,DeviceConstants.DEFAULT_CPU_HYPERTHREAD);//默认一个核心模拟两个线程
 	}
 	/**
 	 * 设定cpu核数n、是否支持超线程h
@@ -108,7 +108,7 @@ public class Cpu {
 	 * n核t线程 2.00GHz h？超线程
 	 */
 	public Cpu(int coreNum,int threadNum,boolean hyperThread){
-		this(coreNum,threadNum,Device.DEFAULT_CORE_FREQUENCY,hyperThread);
+		this(coreNum,threadNum,DeviceConstants.DEFAULT_CORE_FREQUENCY,hyperThread);
 	}
 	/**
 	 * 设定cpu核数n、线程数t、主频f、是否超线程h
@@ -122,7 +122,7 @@ public class Cpu {
 		
 		threadNum=Math.abs(threadNum);//防止输入负数
 		if(hyperThread&&threadNum<=coreNum)//自动调整cpu线程数
-			threadNum=Device.DEFAULT_CPU_HYPERTHREADN*coreNum;
+			threadNum=DeviceConstants.DEFAULT_CPU_HYPERTHREADN*coreNum;
 		this.threadNum=threadNum;
 		
 		this.frequency=frequency;
@@ -176,8 +176,8 @@ public class Cpu {
 	 * 获取详细cpu每个核的使用率
 	 * @return
 	 */
-	public Map<Integer,Float> getDetalUse(){
-		Map<Integer,Float> detalUse=new HashMap<>();
+	public Map<Integer,Double> getDetalUse(){
+		Map<Integer,Double> detalUse=new HashMap<>();
 		for(Core core:cores)
 			detalUse.put(core.getId(), core.getUse());
 		return detalUse;

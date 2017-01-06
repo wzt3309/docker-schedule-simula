@@ -3,7 +3,7 @@ package com.github.dockerschesimu.tools;
 import java.util.Date;
 import java.util.Random;
 
-import com.github.dockerschesimu.constant.Device;
+import com.github.dockerschesimu.constant.DeviceConstants;
 
 public class BaseUUID {
 
@@ -26,8 +26,8 @@ public class BaseUUID {
 		StringBuffer br=new StringBuffer();
 		Random rand=new Random(System.currentTimeMillis());
 		for(int i=0;i<length;i++)
-			br.append(Device.CPU_NICKNAME_SEQ.charAt(
-					rand.nextInt(Device.CPU_NICKNAME_SEQ.length())));
+			br.append(DeviceConstants.CPU_NICKNAME_SEQ.charAt(
+					rand.nextInt(DeviceConstants.CPU_NICKNAME_SEQ.length())));
 		return br.toString();
 	}
 }

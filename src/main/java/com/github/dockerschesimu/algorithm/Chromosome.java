@@ -146,8 +146,8 @@ public class Chromosome {
 		return list;
 	}	
 	/**
-	 * 基因突变
-	 * @param num	突变次数	
+	 * 基因变异
+	 * @param num	基因变异步长	
 	 */
 	public void mutation(int num){
 		int size=gene.length;
@@ -188,6 +188,9 @@ public class Chromosome {
 	}
 	public double getFitness(){
 		return this.fitness;
+	}
+	public void setFitness(double fitness){
+		this.fitness=fitness;
 	}
 	public int getFraglen(){
 		return this.fraglen;
@@ -238,7 +241,7 @@ public class Chromosome {
 			else
 				bf.append(0);
 		}
-		bf.append("]");	
+		bf.append("] fitness:"+fitness);	
 		return bf.toString();
 	}
 

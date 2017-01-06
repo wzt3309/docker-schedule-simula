@@ -1,6 +1,6 @@
 package com.github.dockerschesimu.device;
 
-import com.github.dockerschesimu.constant.Device;
+import com.github.dockerschesimu.constant.DeviceConstants;
 import com.github.dockerschesimu.error.ValError;
 import com.github.dockerschesimu.tools.BaseUUID;
 import com.github.dockerschesimu.tools.BaseValidate;
@@ -18,16 +18,16 @@ public class SATADisk {
 	private final float aat;		//硬盘平均寻址时间
 	private float use;				//硬盘当前负载 百分数
 	{
-		uuid=BaseUUID.uuid(Device.IDENTIFI_DISK);
+		uuid=BaseUUID.uuid(DeviceConstants.IDENTIFI_DISK);
 	}
 	public SATADisk(){
-		this(Device.DEFAULT_SATA_RPM);
+		this(DeviceConstants.DEFAULT_SATA_RPM);
 	}
 	public SATADisk(int rpm){
-		this(rpm,Device.DEFAULT_SATA_MTR);
+		this(rpm,DeviceConstants.DEFAULT_SATA_MTR);
 	}
 	public SATADisk(int rpm,int mtr){
-		this(rpm,mtr,Device.DEFAULT_SATA_AAT);
+		this(rpm,mtr,DeviceConstants.DEFAULT_SATA_AAT);
 	}
 	public SATADisk(int rpm,int mtr,float aat){
 		this.rpm=Math.abs(rpm);

@@ -1,6 +1,6 @@
 package com.github.dockerschesimu.device;
 
-import com.github.dockerschesimu.constant.Device;
+import com.github.dockerschesimu.constant.DeviceConstants;
 import com.github.dockerschesimu.error.device.MemoryOverFlowError;
 import com.github.dockerschesimu.tools.BaseUUID;
 import com.github.dockerschesimu.tools.BaseValidate;
@@ -20,10 +20,10 @@ public class Memory {
 	
 	//---------------------------------------------构造区---------------------------------------//
 	{
-		uuid=BaseUUID.uuid(Device.IDENTIFI_MEM);
+		uuid=BaseUUID.uuid(DeviceConstants.IDENTIFI_MEM);
 	}
 	public Memory(){
-		this(Device.DEFAULT_MEM_TOTAL);
+		this(DeviceConstants.DEFAULT_MEM_TOTAL);
 	}	
 	public Memory(int total){
 		this.total=total;
