@@ -1,5 +1,6 @@
 package com.github.dockerschesimu.device;
 
-public interface CheckPoint {
+public class DeviceFactory {
 
+	
 }

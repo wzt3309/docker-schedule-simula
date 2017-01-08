@@ -127,4 +127,56 @@ public class BaseMath {
 		}
 		return m;
 	}
+	/**
+	 * 限定范围的随机数
+	 * @param min
+	 * @param max
+	 * @param seed
+	 * @return
+	 */
+	public static int random(int min,int max,int seed){
+		double len=(max-min)*1.0/3;
+		double at=Math.random();
+		switch(seed){
+		case 1:return (int)(at*len+min);
+		case 2:return (int)((at+1)*len+min);
+		case 3:return (int)((at+2)*len+min);
+		default :return -1;
+		}
+		
+	}
+	/**
+	 * 限定范围的随机数
+	 * @param min
+	 * @param max
+	 * @param seed
+	 * @return
+	 */
+	public static float random(float min,float max,int seed){
+		double len=(max-min)*1.0/3;
+		double at=Math.random();
+		switch(seed){
+		case 1:return (float)(at*len+min);
+		case 2:return (float)((at+1)*len+min);
+		case 3:return (float)((at+2)*len+min);
+		default :return -1;
+		}
+	}
+	/**
+	 * 限定范围的随机数
+	 * @param min
+	 * @param max
+	 * @param seed
+	 * @return
+	 */
+	public static double random(double min,double max,int seed){
+		double len=(max-min)*1.0/3;
+		double at=Math.random();
+		switch(seed){
+		case 1:return (at*len+min);
+		case 2:return ((at+1)*len+min);
+		case 3:return ((at+2)*len+min);
+		default :return -1;
+		}
+	}
 }

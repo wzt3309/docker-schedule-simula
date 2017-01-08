@@ -1,35 +1,34 @@
 package com.github.dockerschesimu.device;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import com.github.dockerschesimu.error.device.MemoryOverFlowError;
+import com.github.dockerschesimu.manager.Task;
 
 public class MemoryTest {
 
-	private Memory mem=new Memory();
+	 
 	
-	//@Test
+	@Test
 	public void testSetUsed() throws MemoryOverFlowError {
-		int used=1500000,total=mem.getTotal(),free;
-		float use=0F;
-		mem.malloc(1500000);
-		free=total-used;
-		use=(used+1F)/total*100;
+		Memory mem=new Memory();
+		int used=1500000;
+		mem.init(used);		
+		mem.monitor();
 		
-		assertEquals(used,mem.getUsed());
-		assertEquals(free,mem.getFree());
-		assertEquals(use,mem.getUse(),0.001);
-		mem.show();
+		mem.doTask(new Task(2000000));
+		mem.checkPoint();
+		mem.monitor();
+		
+		mem.doTask(new Task(1000000));
+		mem.checkPoint();
+		mem.monitor();
+		
+		mem.recover(0);
+		mem.monitor();
+		
 	}
 
-	@Test
-	public void testShow() throws MemoryOverFlowError {
-		mem.initMEM(160000);
-		mem.show();
-		mem.malloc(1600);
-		mem.show();
-	}
+	
 
 }

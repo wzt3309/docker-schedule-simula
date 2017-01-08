@@ -15,9 +15,9 @@ public class BaseComparators {
 			@Override
 			public int compare(Core o1, Core o2) {
 				
-				if(o1.getUse()>o2.getUse())
+				if(o1.getLoad()>o2.getLoad())
 					return 1;
-				else if(o1.getUse()<o2.getUse())
+				else if(o1.getLoad()<o2.getLoad())
 					return -1;
 				
 				return 0;

@@ -14,6 +14,79 @@ public class Task {
 	private float testFrequence;	//任务测试主频
 	private double testCoreUse;		//任务测试主频下的单核cpu利用率
 	
+	/**
+	 * 存储需求
+	 */
+	private int needMemory;			//需要的内存
+	
+	/**
+	 * io需求
+	 */
+	private int needWaitt;			//磁盘等待时间 ms
+	private int needChunk;			//单次读写块的大小 kb
+	
+	/**
+	 * 网络相关
+	 */
+	private int needNet;			//需要的网络带宽
+	
+	private String lev;
+	
+	public Task(){
+		
+	}
+	/**
+	 * 只设定内存
+	 * @param needMemory
+	 */
+	public Task(int needMemory){
+		super();
+		this.needMemory=needMemory;
+	}
+	/**
+	 * 只设定磁盘IO
+	 * @param needWaitt
+	 * @param needChunk
+	 */
+	public Task(int needWaitt,int needChunk){
+		super();
+		this.needWaitt=needWaitt;
+		this.needChunk=needChunk;
+	}
+	/**
+	 * 只设定cpu
+	 * @param needThreadNum
+	 * @param testFrequence
+	 * @param testCoreUse
+	 */
+	public Task(int needThreadNum, float testFrequence, double testCoreUse) {
+		super();
+		this.needThreadNum = needThreadNum;
+		this.testFrequence = testFrequence;
+		this.testCoreUse = testCoreUse;
+	}	
+	/**
+	 * 设定所有选项
+	 * @param needThreadNum
+	 * @param testFrequence
+	 * @param testCoreUse
+	 * @param needMemory
+	 * @param needWaitt
+	 * @param needChunk
+	 * @param needNet
+	 */
+	public Task(int needThreadNum, float testFrequence, double testCoreUse, int needMemory, int needWaitt,
+			int needChunk, int needNet,String lev) {
+		super();
+		this.needThreadNum = needThreadNum;
+		this.testFrequence = testFrequence;
+		this.testCoreUse = testCoreUse;
+		this.needMemory = needMemory;
+		this.needWaitt = needWaitt;
+		this.needChunk = needChunk;
+		this.needNet = needNet;
+		this.lev=lev;
+	}
 	public int getNeedThreadNum() {
 		return needThreadNum;
 	}
@@ -31,6 +104,45 @@ public class Task {
 	}
 	public void setTestCoreUse(double testCoreUse) {
 		this.testCoreUse = testCoreUse;
+	}
+	public int getNeedMemory() {
+		return needMemory;
+	}
+	public void setNeedMemory(int needMemory) {
+		this.needMemory = needMemory;
+	}
+	public int getNeedWaitt() {
+		return needWaitt;
+	}
+	public void setNeedWaitt(int needWaitt) {
+		this.needWaitt = needWaitt;
+	}
+	public int getNeedChunk() {
+		return needChunk;
+	}
+	public void setNeedChunk(int needChunk) {
+		this.needChunk = needChunk;
+	}
+	public int getNeedNet() {
+		return needNet;
+	}
+	public void setNeedNet(int needNet) {
+		this.needNet = needNet;
+	}	
+	public String getLev() {
+		return lev;
+	}
+	public void setLev(String lev) {
+		this.lev = lev;
+	}
+	public void show(){
+		System.out.println(this);
+	}
+	@Override
+	public String toString() {
+		return "Task lev:"+lev+"[needThreadNum=" + needThreadNum + ", testFrequence=" + testFrequence + ", testCoreUse="
+				+ testCoreUse + ", needMemory=" + needMemory + ", needWaitt=" + needWaitt + ", needChunk=" + needChunk
+				+ ", needNet=" + needNet + "]";
 	}
 	
 	
