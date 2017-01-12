@@ -144,6 +144,17 @@ public class Task {
 				+ testCoreUse + ", needMemory=" + needMemory + ", needWaitt=" + needWaitt + ", needChunk=" + needChunk
 				+ ", needNet=" + needNet + "]";
 	}
-	
-	
+	public String pCpu(){
+		return "Task lev:"+lev+" tnum=" + needThreadNum + " freq=" + testFrequence + " use="
+				+ testCoreUse;
+	}
+	public String pMem(){
+		return "Task lev:"+lev+" mem=" + needMemory;
+	}
+	public String pDisk(){
+		return "Task lev:"+lev+" wait=" + needWaitt+" chunk"+needChunk;
+	}
+	public String pNet(){
+		return "Task lev:"+lev+" net=" + needNet;
+	}
 }

@@ -53,7 +53,7 @@ public class TaskManager {
 		int mem=randomMem(meml);
 		int waitt=randomWait(4-diskl);	//资源消耗等级低，需要产生更大的waitt
 		int chunk=randomChunk(4-diskl);
-		int net=randoNet(netl);
+		int net=randomNet(netl);
 		String lev=cpul+","+meml+","+diskl+","+netl;
 		return new Task(tnum,freq,cuse,mem,waitt,chunk,net,lev);
 	}
@@ -65,7 +65,7 @@ public class TaskManager {
 		return tasks;
 	}
 	/**
-	 * levs n*4维数组 代表每个task的4个资源等级
+	 * levs size*4维数组 代表每个task的4个资源等级,第一维度是size第二维度是4
 	 * @param size
 	 * @param levs
 	 * @return
@@ -85,6 +85,7 @@ public class TaskManager {
 		}
 		return tasks;
 	}
+	
 	/**
 	 * 产生4种资源，平均的，有一种资源是high其他都是low的任务
 	 * @param size
@@ -95,6 +96,10 @@ public class TaskManager {
 	}
 	/**
 	 * 产生4种资源，任意比a:b:c:d，有一种资源是high其他都是low的任务
+	 * a cpu为high的比例
+	 * b mem为high的比例
+	 * c disk为high的比例
+	 * d net为high的比例
 	 * @param size
 	 * @param a
 	 * @param b
@@ -105,9 +110,100 @@ public class TaskManager {
 	public static List<Task> randomTasksFit(int size,double a,double b,double c,double d){
 		return randomTasks(size,levs(size,a,b,c,d));
 	}
+	/**
+	 * 单一资源任务
+	 * @param type
+	 * @param lev
+	 * @return
+	 */
+	public static Task oneResTask(int type,int lev){
+		Task task=new Task();
+		String slev=null;
+		switch(type){
+		case 1:
+			slev=lev+",0,0,0";
+			task.setNeedThreadNum(randomTnum(lev));
+			task.setTestFrequence(randomFreq(lev));
+			task.setTestCoreUse(randomCuse(lev));
+			break;
+		case 2:
+			slev="0,"+lev+",0,0";
+			task.setNeedMemory(randomMem(lev));
+			break;
+		case 3:
+			slev="0,0,"+lev+",0";
+			task.setNeedWaitt(randomWait(lev));
+			task.setNeedChunk(randomChunk(lev));
+			break;
+		case 4:
+			slev="0,0,0,"+lev;
+			task.setNeedNet(randomNet(lev));
+			break;
+		}
+		task.setLev(slev);
+		return task;
+	}
+	/**
+	 * 一组单一资源任务 资源消耗情况 高=中=低 
+	 * @param size
+	 * @param type
+	 * @return
+	 */
+	public static List<Task> oneResTasks(int size,int type){
+		List<Task> tasks=new ArrayList<>();
+		for(int i=0;i<size;i++){
+			Task task=null;
+			if(i<size/3){
+				task=oneResTask(type,RES_LEVEL_LOW);
+			}else if(size>=size/3&&size<size*2/3){
+				task=oneResTask(type,RES_LEVEL_MID);
+			}else{
+				task=oneResTask(type,RES_LEVEL_HIGH);
+			}
+			tasks.add(task);
+		}
+		return tasks;
+	}
+	/**
+	 * 一组单一资源任务 资源消耗情况为levs记录，levs每项为1 2 3
+	 * @param size
+	 * @param type
+	 * @param levs
+	 * @return
+	 */
+	public static List<Task> oneResTasks(int size,int type,int[] levs){
+		List<Task> tasks=new ArrayList<>();
+		for(int i=0;i<size;i++){
+			Task task=null;
+			if(i<levs.length){
+				task=oneResTask(type,levs[i]);
+			}else{
+				task=oneResTask(type,RES_LEVEL_LOW);
+			}
+			tasks.add(task);
+		}
+		return tasks;
+	}
+	
+	
+	/**
+	 * 产生平均比例，高icpu任务数=高imem数=高idisk数=高inet数
+	 * @param size
+	 * @return
+	 */
 	private static int[][] levs(int size){
 		return levs(size,1,1,1,1);
 	}
+	/**
+	 * 产生固定比例，
+	 * 高icpu任务数:高imem数:高idisk数:高inet数=a:b:c:d
+	 * @param size
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @param d
+	 * @return
+	 */
 	private static int[][] levs(int size,double a,double b,double c,double d){		
 		int[][] levs=new int[size][4];
 		double num=a+b+c+d;
@@ -141,7 +237,12 @@ public class TaskManager {
 		}
 		return levs;
 	}
-	public static int randomResLev(){
+	
+	/**
+	 * 随机产生资源消耗的等级
+	 * @return
+	 */
+	private static int randomResLev(){
 		int lev=(int)(Math.random()*3+1);
 		switch(lev){
 		case 1:return RES_LEVEL_LOW;
@@ -150,32 +251,67 @@ public class TaskManager {
 		default:return -1;
 		}
 	}
-	public static int randomTnum(int seed){
+	/**
+	 * 根据资源消耗的等级产生 任务需要的线程数
+	 * @param seed
+	 * @return
+	 */
+	private static int randomTnum(int seed){
 		int n=BaseMath.random(MIN_NEED_TNUM,MAX_NEED_TNUM,seed);
 		return (int)Math.pow(2, n);
 		
 	}
-	public static float randomFreq(int seed){
+	/**
+	 * 根据资源消耗的等级产生 任务测试时cpu主频
+	 * @param seed
+	 * @return
+	 */
+	private static float randomFreq(int seed){
 		float freq=BaseMath.random(MIN_TEST_FREQ,MAX_TEST_FREQ,seed);
 		return freq;
 	}
-	public static float randomCuse(int seed){
+	/**
+	 * 根据资源消耗的等级产生 任务在测试cpu主频下单核资源消耗情况
+	 * @param seed
+	 * @return
+	 */
+	private static float randomCuse(int seed){
 		float cuse=BaseMath.random(MIN_TEST_CUSE,MAX_TEST_CUSE,seed);
 		return cuse;
 	}
-	public static int randomMem(int seed){
+	/**
+	 * 根据资源消耗的等级产生 任务需要的内存数
+	 * @param seed
+	 * @return
+	 */
+	private static int randomMem(int seed){
 		int mem=BaseMath.random(MIN_NEED_MEM,MAX_NEED_MEM,seed);
 		return mem;
 	}
-	public static int randomWait(int seed){
+	/**
+	 * 根据资源消耗的等级产生 任务需要的io等待时间
+	 * @param seed
+	 * @return
+	 */
+	private static int randomWait(int seed){
 		int wait=BaseMath.random(MIN_NEED_WAITT,MAX_NEED_WAITT,seed);
 		return wait;
 	}
-	public static int randomChunk(int seed){
+	/**
+	 * 根据资源消耗的等级产生 任务需要的单次io块大小
+	 * @param seed
+	 * @return
+	 */
+	private static int randomChunk(int seed){
 		int chunk=BaseMath.random(MIN_NEED_CHUNK,MAX_NEED_CHUNK,seed);
 		return chunk;
 	}
-	public static int randoNet(int seed){
+	/**
+	 * 根据资源消耗的等级产生 任务需要的网络带宽
+	 * @param seed
+	 * @return
+	 */
+	private static int randomNet(int seed){
 		int net=BaseMath.random(MIN_NEED_NET,MAX_NEED_NET,seed);
 		return net;
 	}

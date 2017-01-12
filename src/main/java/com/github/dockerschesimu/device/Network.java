@@ -22,12 +22,12 @@ public class Network implements Device {
 		this.total=total;
 	}
 	/**
-	 * 使用的带宽 Mbps
+	 * 使用的带宽 百分比
 	 * @param used
 	 */
-	public void init(int used){
-		if(used<=total)	{
-			this.used=used;
+	public void init(double used){
+		if(used<=100)	{
+			this.used=(int)(this.total*used/100);
 			this.free=this.total-this.used;
 			checkPoint();
 		}		

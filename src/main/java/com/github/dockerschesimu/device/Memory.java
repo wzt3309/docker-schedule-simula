@@ -35,19 +35,19 @@ public class Memory implements Device{
 		
 	}
 	/**
-	 * 任务开始前，设定内存使用情况 Mb
+	 * 任务开始前，设定内存使用情况 百分比
 	 * @param used
 	 * @throws MemoryOverFlowError
 	 */
-	public void init(int mem){		
-		if(mem<=total)	{
-			this.used=mem;
+	public void init(double used){		
+		if(used<=100)	{
+			this.used=(int)(this.total*used/100);
 			this.free=this.total-this.used;
 			checkPoint();
 		}		
 	}
 	@Override
-	public boolean doTask(Task task) {
+	public boolean doTask(Task task) {		
 		int needMem=task.getNeedMemory();
 		if(needMem>free){
 			return false;

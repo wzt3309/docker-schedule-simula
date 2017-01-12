@@ -4,7 +4,7 @@ import com.github.dockerschesimu.manager.Task;
 public class Host {
 
 	private static int count=0;
-	private final int id=count++;
+	private int id=count++;
 	private Cpu cpu;
 	private Memory mem;
 	private Disk disk;
@@ -24,8 +24,14 @@ public class Host {
 		this.net = net;
 		this.levl=levl;
 	}
-
-	public void init(double icpu,int imem,double idisk,int inet){
+	/**
+	 * 初始化 主机各项资源，都是百分比
+	 * @param icpu
+	 * @param imem
+	 * @param idisk
+	 * @param inet
+	 */
+	public void init(double icpu,double imem,double idisk,double inet){
 		cpu.init(icpu);
 		mem.init(imem);
 		disk.init(idisk);
@@ -33,26 +39,72 @@ public class Host {
 		//checkPoint();  init时自动保存记录点,此处只需要增加recoverI
 		recoverI++;		
 	}
-	public boolean doTask(Task task){
-		return cpu.doTask(task)
-				&&mem.doTask(task)
-				&&disk.doTask(task)
-				&&net.doTask(task);
+	/**
+	 * 
+	 * @param task
+	 * @return 没有成功的资源序号
+	 */
+	public int doTask(Task task){
+		if(!cpu.doTask(task)){
+			return 1;
+		}
+		if(!mem.doTask(task)){
+			return 2;
+		}
+		if(!disk.doTask(task)){
+			return 3;
+		}
+		if(!net.doTask(task)){
+			return 4;
+		}
+		return 0;
 		
 	}
+	public int doCpuTask(Task task){
+		if(!cpu.doTask(task)){
+			return 1;
+		}
+		return 0;
+	}
+	public int doMemTask(Task task){
+		if(!mem.doTask(task)){
+			return 1;
+		}
+		return 0;
+	}
+	public int doDiskTask(Task task){
+		if(!disk.doTask(task)){
+			return 1;
+		}
+		return 0;
+	}
+	public int doNetTask(Task task){
+		if(!net.doTask(task)){
+			return 1;
+		}
+		return 0;
+	}
+	/**
+	 * 
+	 * @return 哪项资源没恢复成功返回 -(1+n) 返回-1说明本host没有init
+	 */
 	public int recover(){
 		int k=-1;
 		if(recoverI>0){
-			if(cpu.recover()==-1
-					||mem.recover()==-1
-					||disk.recover()==-1
-					||net.recover()==-1)
-			{
-				return -1;
+			if(cpu.recover()==-1){
+				return -2;
+			}
+			if(mem.recover()==-1){
+				return -3;
+			}
+			if(disk.recover()==-1){
+				return -4;
+			}
+			if(net.recover()==-1){
+				return -5;
 			}			
 			k=recoverI-1;
-		}
-		
+		}		
 		return k;
 	}
 	public void recover(int k){
@@ -73,16 +125,36 @@ public class Host {
 		recoverI++;
 	}
 	
+	public void mCpu(){
+		System.out.println("Host id="+id+" levl="+levl);
+		System.out.println("cpu monitor:");
+		cpu.monitor();
+	}
+	public void mMem(){
+		System.out.println("Host id="+id+" levl="+levl);
+		System.out.println("mem monitor:");
+		mem.monitor();
+	}
+	public void mDisk(){
+		System.out.println("Host id="+id+" levl="+levl);
+		System.out.println("disk monitor:");
+		disk.monitor();
+	}
+	public void mNet(){
+		System.out.println("Host id="+id+" levl="+levl);
+		System.out.println("net monitor:");
+		net.monitor();
+	}
 	public void monitor(){
 		System.out.println("Host id="+id+" levl="+levl);
 		System.out.println("cpu monitor:");
 		cpu.monitor();
-//		System.out.println("mem monitor:");
-//		mem.monitor();
-//		System.out.println("disk monitor:");
-//		disk.monitor();
-//		System.out.println("net monitor:");
-//		net.monitor();
+		System.out.println("mem monitor:");
+		mem.monitor();
+		System.out.println("disk monitor:");
+		disk.monitor();
+		System.out.println("net monitor:");
+		net.monitor();
 	}
 	public void info(){
 		System.out.println(this);
@@ -157,6 +229,7 @@ public class Host {
 		buf.append("\n>");
 		return buf.toString();
 	}
+	
 }
 
 

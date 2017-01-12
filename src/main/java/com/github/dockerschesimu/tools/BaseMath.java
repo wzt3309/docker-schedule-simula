@@ -179,4 +179,37 @@ public class BaseMath {
 		default :return -1;
 		}
 	}
+	/**
+	 * 计算标准差
+	 * @param params
+	 * @return
+	 */
+	public static double stander(double[] params){
+		if(params==null||params.length<1){
+			return 0;
+		}
+		double sum=0;
+		double len=params.length;
+		double avg=0;
+		double sumP=0;
+		double avgP=0;
+		
+		for(double x:params){
+			sum+=x;
+		}
+		avg=sum/len;
+		for(double x:params){
+			double p=Math.pow(x-avg, 2);
+			sumP+=p;
+		}
+		avgP=Math.sqrt(sumP/len);
+		return avgP;
+		
+	}
+	
+	
+	
+	
+	
+	
 }

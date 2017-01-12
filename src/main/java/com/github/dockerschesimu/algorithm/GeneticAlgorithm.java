@@ -27,12 +27,14 @@ public class GeneticAlgorithm {
 	private double hBestFitness;		//记录历史种群中最好的适应度，历史上最好的docker容器集群负载结果
 	private int geneI;					//historyBest所在的代数
 	
+	private FitnessFunction func;		//适应度计算函数
 	public GeneticAlgorithm(int geneSize,int geneFraglen
-			,int geneDecMin,int geneDecMax){
+			,int geneDecMin,int geneDecMax,FitnessFunction func){
 		this.geneSize=geneSize;
 		this.geneFraglen=geneFraglen;
 		this.geneDecMin=geneDecMin;
 		this.geneDecMax=geneDecMax;
+		this.func=func;
 	}
 	/**
 	 * 执行算法
@@ -42,9 +44,11 @@ public class GeneticAlgorithm {
 		generation=1;
 		init();
 		while(generation<maxIterNum){
+			System.out.println("---------------第 "+generation+" 代开始---------------");
 			evolve();
 			print();
 			generation++;
+			System.out.println("---------------第 "+generation+" 代结束---------------");
 		}
 	}
 	/**
@@ -65,6 +69,7 @@ public class GeneticAlgorithm {
 	 * 初始化种群
 	 */
 	private void init(){
+		System.out.println("---------------种群初始化开始---------------");
 		population=new ArrayList<>();
 		for(int i=0;i<popSize;i++){
 			Chromosome chro
@@ -73,6 +78,7 @@ public class GeneticAlgorithm {
 		}
 		caculteFitness();
 		print();
+		System.out.println("---------------种群初始化结束---------------");
 	}	
 	/**
 	 * 轮盘赌算法，获取可以遗传到下一代的染色体
@@ -133,14 +139,14 @@ public class GeneticAlgorithm {
 	 * @return
 	 */
 	private boolean canBeParent(Chromosome chro){
-		return getFitnessFunc().canBeParent(chro.decodeGene(geneDecMin, geneDecMax))
+		return func.canBeParent(chro.decodeGene(geneDecMin, geneDecMax))
 				&&firstIsNoWorst(chro.getFitness(),averageFitness);
 	}
 	/**
 	 * 计算种群适应度
 	 */
-	private void caculteFitness(){
-		setChromosomeFitness(population.get(0),getFitnessFunc());
+	private void caculteFitness(){		
+		setChromosomeFitness(population.get(0),func);
 		bestFitness=population.get(0).getFitness();
 		worstFitness=population.get(0).getFitness();
 		totalFitness=0;
@@ -150,7 +156,7 @@ public class GeneticAlgorithm {
 			hBestFitness=bestFitness;
 		}
 		for(Chromosome chro:population){
-			setChromosomeFitness(chro,getFitnessFunc());
+			setChromosomeFitness(chro,func);
 			if(firstIsBetter(chro.getFitness(),bestFitness)){
 				bestFitness=chro.getFitness();
 				if(firstIsBetter(bestFitness,hBestFitness)){
@@ -186,8 +192,8 @@ public class GeneticAlgorithm {
 	 * 获取计算适应度的函数
 	 * @return
 	 */
-	private FitnessFunction getFitnessFunc(){
-		return new FitnessFun1();
+	public FitnessFunction getFitnessFunc(){
+		return func;
 	}
 	/**
 	 * f1适应度 > f2

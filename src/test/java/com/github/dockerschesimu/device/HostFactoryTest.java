@@ -31,11 +31,11 @@ public class HostFactoryTest {
 			Task task=tasks.get(i);
 			int hostI=taskTable[i];
 			Host host=hosts.get(hostI);
-			if(!host.doTask(task)){
-				over=true;
-				System.out.println("task"+i+"host"+hostI);
-				break;
-			}
+//			if(!host.doTask(task)){
+//				over=true;
+//				System.out.println("task"+i+"host"+hostI);
+//				break;
+//			}
 		}
 		if(over){
 			for(Host host:hosts)
