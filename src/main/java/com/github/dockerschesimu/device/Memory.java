@@ -7,7 +7,7 @@ import com.github.dockerschesimu.constant.DeviceConstants;
 import com.github.dockerschesimu.error.device.MemoryOverFlowError;
 import com.github.dockerschesimu.manager.Task;
 import com.github.dockerschesimu.tools.BaseUUID;
-
+import static com.github.dockerschesimu.tools.BaseLogger.*;
 /**
  * 模拟内存
  * @author wzt
@@ -15,7 +15,7 @@ import com.github.dockerschesimu.tools.BaseUUID;
  */
 public class Memory implements Device{
 
-	private final long uuid;	//内存设备uuid
+	//private final long uuid;	//内存设备uuid
 	private final int total;	//内存总容量 单位kb
 	private int used;			//已被使用的内存 单位kb
 	private int free;			//空闲的内存 单位kb
@@ -25,7 +25,7 @@ public class Memory implements Device{
 	
 	//---------------------------------------------构造区---------------------------------------//
 	{
-		uuid=BaseUUID.uuid(DeviceConstants.IDENTIFI_MEM);
+		//uuid=BaseUUID.uuid(DeviceConstants.IDENTIFI_MEM);
 	}
 	public Memory(){
 		this(DeviceConstants.DEFAULT_MEM_TOTAL);
@@ -60,7 +60,7 @@ public class Memory implements Device{
 	@Override
 	public double getLoad() {
 		
-		return (this.used+1.0F)/(this.total+1.0F)*100;
+		return (this.used*1.0)/(this.total*1.0)*100;
 	}
 	@Override
 	public void checkPoint() {
@@ -98,7 +98,7 @@ public class Memory implements Device{
 	}
 	@Override
 	public void info() {
-		System.out.println(this);
+		INFO(this);
 	}
 	//-------------------------------------------对象方法区-------------------------------------//
 	/**
@@ -120,27 +120,26 @@ public class Memory implements Device{
 		return this.free;
 	}
 	public String toString(){
-		return String.format("[%-18s %10d %10d %10d %7.2f%%]"
-				, String.valueOf(uuid),total,used,free,getLoad());
+		return String.format("[%10d %10d %10d %7.2f%%]"
+				,total,used,free,getLoad());
 	}
 	/**
 	 * 显示内存描述信息 单位KB
 	 */
 	private void show(){
-		System.out.format("%19s %10s %10s %10s %8s\n"
-				, "uuid","total(k)","used(k)","free(k)","use%");
-		System.out.println(this);
+		INFO(String.format("%12s %10s %10s %8s"
+				,"total(k)","used(k)","free(k)","use%"));
+		INFO(this);
 	}
 	/**
 	 * 显示内存描述信息 单位GB
 	 */
 	private void showGB(){
-		System.out.format("%19s %10s %10s %10s %8s\n"
-				, "uuid","total(G)","used(G)","free(G)","use%");
+		INFO(String.format("%12s %10s %10s %8s"
+				,"total(G)","used(G)","free(G)","use%"));
 		
-		System.out.format("[%-18s %10.2f %10.2f %10.2f %7.2f%%]\n"
-				, String.valueOf(uuid)
-				,total/1000000f,used/1000000f,free/1000000f,getLoad());
+		INFO(String.format("[%10.2f %10.2f %10.2f %7.2f%%]"				
+				,total/1000000f,used/1000000f,free/1000000f,getLoad()));
 	}
 	
 	

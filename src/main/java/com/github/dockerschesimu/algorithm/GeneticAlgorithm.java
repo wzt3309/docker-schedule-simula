@@ -3,6 +3,7 @@ package com.github.dockerschesimu.algorithm;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import static com.github.dockerschesimu.tools.BaseLogger.*;
 
 public class GeneticAlgorithm {
 
@@ -44,32 +45,35 @@ public class GeneticAlgorithm {
 		generation=1;
 		init();
 		while(generation<maxIterNum){
-			System.out.println("---------------第 "+generation+" 代开始---------------");
+			INFO("-------------------------第 "+generation+" 代开始-------------------------");
 			evolve();
 			print();
-			generation++;
-			System.out.println("---------------第 "+generation+" 代结束---------------");
+			INFO("-------------------------第 "+generation+" 代结束-------------------------");
+			generation++;			
 		}
+		INFO("===========================最终结果===========================");		
+		func.pfitness(hBestTaskList);
 	}
 	/**
 	 * 打印每次迭代结果
 	 */
 	private void print(){
-		System.out.println("--------------------------------");  
-        System.out.println("the generation is:" + generation);  
-        System.out.println("the best y is:" + bestFitness);  
-        System.out.println("the worst fitness is:" + worstFitness);  
-        System.out.println("the average fitness is:" + averageFitness);  
-        System.out.println("the total fitness is:" + totalFitness);
-        System.out.println("geneI:" + geneI + 
-        		"\nhBestTaskList:" + Arrays.toString(hBestTaskList) + 
-        		"\nhBestFitness:" + hBestFitness);
+//		INFO("-------------------------------------------------------------");  
+		INFO("the generation is:" + generation);  
+		INFO("the best y is:" + bestFitness);  
+        INFO("the worst fitness is:" + worstFitness);  
+        INFO("the average fitness is:" + averageFitness);  
+        INFO("the total fitness is:" + totalFitness);
+        INFO("geneI:" + geneI);
+        INFO("hBestTaskList:" + Arrays.toString(hBestTaskList));
+        INFO("hBestFitness:" + hBestFitness);
+//      INFO("-------------------------------------------------------------");       
 	}
 	/**
 	 * 初始化种群
 	 */
 	private void init(){
-		System.out.println("---------------种群初始化开始---------------");
+		INFO("-----------------------种群初始化开始-------------------------");
 		population=new ArrayList<>();
 		for(int i=0;i<popSize;i++){
 			Chromosome chro
@@ -78,7 +82,7 @@ public class GeneticAlgorithm {
 		}
 		caculteFitness();
 		print();
-		System.out.println("---------------种群初始化结束---------------");
+		INFO("-----------------------种群初始化结束-------------------------\n");
 	}	
 	/**
 	 * 轮盘赌算法，获取可以遗传到下一代的染色体

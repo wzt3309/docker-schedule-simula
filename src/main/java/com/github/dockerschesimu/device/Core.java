@@ -9,6 +9,8 @@ import com.github.dockerschesimu.error.device.SetCoreUseNegtiveError;
 import com.github.dockerschesimu.error.device.SetCoreUseOverMaxError;
 import com.github.dockerschesimu.manager.Task;
 import com.github.dockerschesimu.tools.BaseUUID;
+
+import static com.github.dockerschesimu.tools.BaseLogger.*;
 /**
  * 模拟cpu核心
  * @author wzt
@@ -16,8 +18,8 @@ import com.github.dockerschesimu.tools.BaseUUID;
  */
 public class Core implements Device{
 
-	private final long uuid;			//核心的设备uuid
-	private final long ref_cpu_uuid;	//核心所关联cpu的设备uuid
+	//private final long uuid;			//核心的设备uuid
+	//private final long ref_cpu_uuid;	//核心所关联cpu的设备uuid
 	private final int id;				//核心编号，表示在cpu中是第几个核
 	private final float frequency;		//核心主频
 	private double use;					//核心利用率 百分数
@@ -27,14 +29,14 @@ public class Core implements Device{
 	
 	//---------------------------------------------构造区-----------------------------------//
 	{
-		this.uuid=BaseUUID.uuid(DeviceConstants.IDENTIFI_CORE);
+		//this.uuid=BaseUUID.uuid(DeviceConstants.IDENTIFI_CORE);
 	}
-	public Core(int id,long ref_cpu_uuid){
-		this(id,ref_cpu_uuid,DeviceConstants.DEFAULT_CORE_FREQUENCY);
+	public Core(int id){
+		this(id,DeviceConstants.DEFAULT_CORE_FREQUENCY);
 	}
-	public Core(int id,long ref_cpu_uuid,float frequency){
+	public Core(int id,float frequency){
 		this.id=id;
-		this.ref_cpu_uuid=ref_cpu_uuid;
+		//this.ref_cpu_uuid=ref_cpu_uuid;
 		this.frequency=frequency;
 	}
 	public void init(double use) {
@@ -45,8 +47,9 @@ public class Core implements Device{
 				throw new SetCoreUseNegtiveError();
 			this.use = use;		
 		} catch (SetCoreUseError e) {
-			System.out.format("cpu[%18s] 第%d核心初始化出错\n 输入use:%7.2f有误"
-					, String.valueOf(ref_cpu_uuid),id,use);
+			ERROR(String.format("cpu 第%d核心初始化出错\n 输入use:%7.2f有误"
+					, //String.valueOf(ref_cpu_uuid),
+					id,use));
 		}
 		checkPoint();
 	}
@@ -92,23 +95,23 @@ public class Core implements Device{
 	}
 	@Override
 	public void monitor() {
-		System.out.println(this);
+		INFO(this);
 	}
 	@Override
 	public void info() {
-		System.out.println(toInfo());
+		INFO(toInfo());
 	}	
 	//---------------------------------------------对象方法区-----------------------------------//
 	/**
 	 * 返回描述 [id,uuid,frequency,use,ref_cpu_uuid]
 	 */
 	public String toString(){
-		return String.format("[%-2d %-18s %7.2fGHz %7.2f%% %18s]", id,String.valueOf(uuid)
-				,frequency,use,String.valueOf(ref_cpu_uuid));
+		return String.format("[%-2d %7.2fGHz %7.2f%%]", id
+				,frequency,use);
 	}
 	public String toInfo(){
-		return String.format("[%-2d %-18s %7.2fGHz %18s]", id,String.valueOf(uuid)
-				,frequency,String.valueOf(ref_cpu_uuid));
+		return String.format("[%-2d %7.2fGHz]", id
+				,frequency);
 	}
 	//---------------------------------------------getter/setter区-----------------------------------//
 	public float getFrequency() {
@@ -117,12 +120,12 @@ public class Core implements Device{
 	public int getId() {
 		return id;
 	}
-	public long getUuid() {
-		return uuid;
-	}
-	public long getRef_cpu_uuid() {
-		return ref_cpu_uuid;
-	}
+//	public long getUuid() {
+//		return uuid;
+//	}
+//	public long getRef_cpu_uuid() {
+//		return ref_cpu_uuid;
+//	}
 	
 	
 }

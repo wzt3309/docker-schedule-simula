@@ -2,6 +2,7 @@
 /target/
 /.settings/
 /.git
+/logs
 
 #文件
 .classpath

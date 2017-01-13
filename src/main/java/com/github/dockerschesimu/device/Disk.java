@@ -7,8 +7,7 @@ import com.github.dockerschesimu.constant.DeviceConstants;
 import com.github.dockerschesimu.error.ValError;
 import com.github.dockerschesimu.manager.Task;
 import com.github.dockerschesimu.tools.BaseUUID;
-import com.github.dockerschesimu.tools.BaseValidate;
-
+import static com.github.dockerschesimu.tools.BaseLogger.*;
 /**
  * 模拟机械硬盘
  * @author wzt
@@ -16,7 +15,7 @@ import com.github.dockerschesimu.tools.BaseValidate;
  */
 public class Disk implements Device{
 
-	private final long uuid;		//硬盘设备uuid
+	//private final long uuid;		//硬盘设备uuid
 	private final int rpm;			//硬盘转速
 	private final int mtr;			//硬盘最大持续传输速率
 	private final float aat;		//硬盘平均寻址时间
@@ -26,7 +25,7 @@ public class Disk implements Device{
 	private int recoverI=0;								//当前是第几个保存点
 	
 	{
-		uuid=BaseUUID.uuid(DeviceConstants.IDENTIFI_DISK);
+		//uuid=BaseUUID.uuid(DeviceConstants.IDENTIFI_DISK);
 	}
 	public Disk(){
 		this(DeviceConstants.DEFAULT_SATA_RPM);
@@ -101,17 +100,17 @@ public class Disk implements Device{
 	}
 	@Override
 	public void monitor() {
-		System.out.format("%19s %10s %10s %10s %8s\n"
-				, "uuid","rpm(r/min)","mtr(mb/s)","aat(ms)","use%");
-		System.out.println(this);
+		INFO(String.format("%12s %10s %10s %8s"
+				,"rpm(r/min)","mtr(mb/s)","aat(ms)","use%"));
+		INFO(this);
 	}
 	@Override
 	public void info() {
-		System.out.println(this);
+		INFO(this);
 	}
 	public String toString(){
-		return String.format("[%-18s %10d %10d %10.2f %7.2f%%]",
-				String.valueOf(uuid),rpm,mtr,aat,use);
+		return String.format("[%10d %10d %10.2f %7.2f%%]",
+				rpm,mtr,aat,use);
 	}
 	/**
 	 * task方法
@@ -148,9 +147,9 @@ public class Disk implements Device{
 	}	
 	
 	
-	public long getUuid() {
-		return uuid;
-	}
+//	public long getUuid() {
+//		return uuid;
+//	}
 	public int getRpm() {
 		return rpm;
 	}

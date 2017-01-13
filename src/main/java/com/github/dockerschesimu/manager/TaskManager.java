@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.dockerschesimu.tools.BaseMath;
+import static com.github.dockerschesimu.tools.BaseLogger.*;
 /**
  * 任务生成
  * @author wzt
@@ -22,6 +23,7 @@ public class TaskManager {
 		for(int i=0;i<size;i++){
 			tasks.add(simpleTask());
 		}
+		printTasks(tasks,0);
 		return tasks;
 	}
 	/**
@@ -62,6 +64,7 @@ public class TaskManager {
 		for(int i=0;i<size;i++){
 			tasks.add(randomTask());
 		}
+		printTasks(tasks,0);
 		return tasks;
 	}
 	/**
@@ -83,6 +86,7 @@ public class TaskManager {
 				tasks.add(randomTask());
 			}
 		}
+		printTasks(tasks,0);
 		return tasks;
 	}
 	
@@ -155,13 +159,14 @@ public class TaskManager {
 			Task task=null;
 			if(i<size/3){
 				task=oneResTask(type,RES_LEVEL_LOW);
-			}else if(size>=size/3&&size<size*2/3){
+			}else if(i>=size/3&&i<size*2/3){
 				task=oneResTask(type,RES_LEVEL_MID);
 			}else{
 				task=oneResTask(type,RES_LEVEL_HIGH);
 			}
 			tasks.add(task);
 		}
+		printTasks(tasks,type);
 		return tasks;
 	}
 	/**
@@ -182,9 +187,33 @@ public class TaskManager {
 			}
 			tasks.add(task);
 		}
+		printTasks(tasks,type);
 		return tasks;
 	}
 	
+	public static void printTasks(List<Task> tasks,int type){
+		INFO("------------------打印Task列表 开始------------------");
+		for(Task task:tasks){
+			switch(type){
+			case 0:
+				INFO(task);
+				break;
+			case 1:
+				INFO(task.pCpu());
+				break;
+			case 2:
+				INFO(task.pMem());
+				break;
+			case 3:
+				INFO(task.pDisk());
+				break;
+			case 4:
+				INFO(task.pNet());
+				break;
+			}
+		}
+		INFO("------------------打印Task列表 结束------------------\n");
+	}
 	
 	/**
 	 * 产生平均比例，高icpu任务数=高imem数=高idisk数=高inet数

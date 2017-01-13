@@ -7,6 +7,7 @@ import java.util.List;
 import com.github.dockerschesimu.manager.Cluster;
 import com.github.dockerschesimu.manager.Task;
 import com.github.dockerschesimu.tools.BaseMath;
+import static com.github.dockerschesimu.tools.BaseLogger.*;
 
 public class DockerCluFunc implements FitnessFunction {
 	
@@ -17,12 +18,43 @@ public class DockerCluFunc implements FitnessFunction {
 	
 	public DockerCluFunc(Cluster cluster,List<Task> tasks,int type){
 		if(!cluster.isInit()){
-			cluster.init();
-			System.out.println("cluster 未初始化，执行默认初始化");
+			WARN("cluster 未初始化，执行默认初始化");
+			cluster.init();			
 		}
 		this.cluster=cluster;
 		this.tasks=tasks;
 		this.type=type;
+	}
+	/**
+	 * 打印当前最佳任务分配列表的结果
+	 * @param sche
+	 */
+	public void pfitness(int[] sche){
+		cluster.doTasks(sche,tasks,type);
+		INFO("the best list monitor:");
+		switch(type){
+		case 0:
+			cluster.monitor();
+			fitAll();
+			break;
+		case 1:
+			cluster.mCpu();
+			fitCpu();
+			break;
+		case 2:
+			cluster.mMem();
+			fitMem();
+			break;
+		case 3:
+			cluster.mDisk();
+			fitDisk();
+			break;
+		case 4:
+			cluster.mNet();
+			fitNet();
+			break;
+		}
+		cluster.recover();
 	}
 	@Override
 	public double fitness(int[] sche) {
@@ -30,11 +62,26 @@ public class DockerCluFunc implements FitnessFunction {
 		double fit=0;
 		if(doTaskRes){
 			switch(type){
-			case 0:cluster.monitor();fit=fitAll();break;
-			case 1:cluster.mCpu();fit=fitCpu();break;
-			case 2:cluster.mMem();fit=fitMem();break;
-			case 3:cluster.mDisk();fit=fitDisk();break;
-			case 4:cluster.mNet();fit=fitNet();break;
+			case 0:
+				//cluster.monitor();
+				fit=fitAll();
+				break;
+			case 1:
+				//cluster.mCpu();
+				fit=fitCpu();
+				break;
+			case 2:
+				//cluster.mMem();
+				fit=fitMem();
+				break;
+			case 3:
+				//cluster.mDisk();
+				fit=fitDisk();
+				break;
+			case 4:
+				//cluster.mNet();
+				fit=fitNet();
+				break;
 			}
 		}else{
 			failSches.add(sche);//记录失败的任务分配计划

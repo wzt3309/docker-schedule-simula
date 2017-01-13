@@ -12,6 +12,7 @@ import com.github.dockerschesimu.manager.Task;
 import com.github.dockerschesimu.tools.BaseComparators;
 import com.github.dockerschesimu.tools.BaseUUID;
 
+import static com.github.dockerschesimu.tools.BaseLogger.*;
 /**
  * 模拟cpu
  * @author wzt
@@ -19,7 +20,7 @@ import com.github.dockerschesimu.tools.BaseUUID;
  */
 public class Cpu implements Device{
 
-	private final long uuid;	 			//cpu的设备uuid
+	//private final long uuid;	 			//cpu的设备uuid
 	private final String nickname;			//cpu别名
 	private final Core[] cores;	     		//cpu核心组
 	private final int coreNum;		 		//cpu核心数	
@@ -33,24 +34,24 @@ public class Cpu implements Device{
 	 * @return
 	 * @throws CoreIsNotInitError
 	 */
-	private static boolean isCoreInOneCpu(Core[] c) throws CoreIsNotInitError{
-		Core c0=c[0];
-		if(c0!=null){
-			long refuuid=c[0].getRef_cpu_uuid();
-			for(Core ci:c){
-				if(ci==null)
-					throw new CoreIsNotInitError();
-				if(ci.getRef_cpu_uuid()!=refuuid)
-					return false;
-			}				
-			return true;
-		}
-		throw new CoreIsNotInitError();
-	}
+//	private static boolean isCoreInOneCpu(Core[] c) throws CoreIsNotInitError{
+//		Core c0=c[0];
+//		if(c0!=null){
+//			long refuuid=c[0].getRef_cpu_uuid();
+//			for(Core ci:c){
+//				if(ci==null)
+//					throw new CoreIsNotInitError();
+//				if(ci.getRef_cpu_uuid()!=refuuid)
+//					return false;
+//			}				
+//			return true;
+//		}
+//		throw new CoreIsNotInitError();
+//	}
 	
 	//-------------------------------------------初始化区-------------------------------------------//
 	{
-		this.uuid=BaseUUID.uuid(IDENTIFI_CPU);
+		//this.uuid=BaseUUID.uuid(IDENTIFI_CPU);
 		this.nickname=BaseUUID.randomstr(CPU_NICKNAME_LENGTH);
 	}
 	/**
@@ -83,7 +84,8 @@ public class Cpu implements Device{
 	 */
 	private void initCore(float frequency){		
 		for(int i=0;i<coreNum;i++){
-			cores[i]=new Core(i,this.uuid,frequency);
+			cores[i]=new Core(i,//this.uuid,
+					frequency);
 		}	
 	}
 	
@@ -157,17 +159,17 @@ public class Cpu implements Device{
 	@Override
 	public void monitor() {
 		info();
-		System.out.format("%-2s %19s  %4s %8s %19s\n"
-				, "id","uuid","frequency","use","ref_cpu_uuid");
-		System.out.format("%-3s %-18s  %4s %8s %19s\n", "--","------------------"
-				,"---------","------","-------------------");	
+		INFO(String.format("%-3s %11s %8s"
+				, "id","frequency","use"));
+		INFO(String.format("%-3s %11s %8s", "---"
+				,"-----------","-------"));	
 		sortCoresById();
 		for(int i=0;i<cores.length;i++)
 			cores[i].monitor();
 	}
 	@Override
 	public void info() {
-		System.out.println(this);
+		INFO(this);
 	}	
 	
 	/**
@@ -191,15 +193,15 @@ public class Cpu implements Device{
 	 * @param c
 	 * @throws CoreIsNotInitError 核心必须要是同一cpu的
 	 */
-	private void sortCoresByUuid(){
-		Arrays.sort(cores, BaseComparators.byCoreUuid());
-	}	
+//	private void sortCoresByUuid(){
+//		Arrays.sort(cores, BaseComparators.byCoreUuid());
+//	}	
 	/**
 	 * 返回字符串CPU[uuid nickname] c核t线程fGHz
 	 */
 	public String toString(){
-		return String.format("CPU[%-18s %s] %2d核%6.2fGHz total_use:%4.2f%%", String.valueOf(uuid)
-				,this.nickname,coreNum,frequency,getLoad());
+		return String.format("CPU[%s] %2d核%6.2fGHz total_use:%4.2f%%", //String.valueOf(uuid),
+				this.nickname,coreNum,frequency,getLoad());
 	}	
 	//-------------------------------------------getter/setter区-------------------------------------------//
 	public Core[] getCores() {

@@ -1,6 +1,8 @@
 package com.github.dockerschesimu.device;
 
 import com.github.dockerschesimu.manager.Task;
+import static com.github.dockerschesimu.tools.BaseLogger.*;
+
 public class Host {
 
 	private static int count=0;
@@ -126,38 +128,48 @@ public class Host {
 	}
 	
 	public void mCpu(){
-		System.out.println("Host id="+id+" levl="+levl);
-		System.out.println("cpu monitor:");
+		INFO(">>>>>>>>>>STAT<<<<<<<<<<");
+		INFO("Host id="+id+" levl="+levl);
+//		INFO("CPU MONITOR:");
 		cpu.monitor();
+		INFO(">>>>>>>>>>END<<<<<<<<<<");
 	}
 	public void mMem(){
-		System.out.println("Host id="+id+" levl="+levl);
-		System.out.println("mem monitor:");
+		INFO(">>>>>>>>>>STAT<<<<<<<<<<");
+		INFO("Host id="+id+" levl="+levl);
+//		INFO("MEM MONITOR:");
 		mem.monitor();
+		INFO(">>>>>>>>>>END<<<<<<<<<<");
 	}
 	public void mDisk(){
-		System.out.println("Host id="+id+" levl="+levl);
-		System.out.println("disk monitor:");
+		INFO(">>>>>>>>>>STAT<<<<<<<<<<");
+		INFO("Host id="+id+" levl="+levl);
+//		INFO("DISK MONITOR:");
 		disk.monitor();
+		INFO(">>>>>>>>>>END<<<<<<<<<<");
 	}
 	public void mNet(){
-		System.out.println("Host id="+id+" levl="+levl);
-		System.out.println("net monitor:");
+		INFO(">>>>>>>>>>STAT<<<<<<<<<<");
+		INFO("Host id="+id+" levl="+levl);
+//		INFO("NET MONITOR:");
 		net.monitor();
+		INFO(">>>>>>>>>>END<<<<<<<<<<");
 	}
 	public void monitor(){
-		System.out.println("Host id="+id+" levl="+levl);
-		System.out.println("cpu monitor:");
-		cpu.monitor();
-		System.out.println("mem monitor:");
+		INFO(">>>>>>>>>>STAT<<<<<<<<<<");
+		INFO("Host id="+id+" levl="+levl);
+//		INFO("CPU MONITOR:");
+		cpu.info();
+//		INFO("MEM MONITOR:");
 		mem.monitor();
-		System.out.println("disk monitor:");
+//		INFO("DISK MONITOR:");
 		disk.monitor();
-		System.out.println("net monitor:");
+//		INFO("NET MONITOR:");
 		net.monitor();
+		INFO(">>>>>>>>>>END<<<<<<<<<<");
 	}
 	public void info(){
-		System.out.println(this);
+		INFO(this);
 	}
 	public Cpu getCpu() {
 		return cpu;

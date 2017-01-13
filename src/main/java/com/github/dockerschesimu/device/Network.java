@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.github.dockerschesimu.constant.DeviceConstants;
 import com.github.dockerschesimu.manager.Task;
+import static com.github.dockerschesimu.tools.BaseLogger.*;
 
 public class Network implements Device {
 	
@@ -46,8 +47,8 @@ public class Network implements Device {
 
 	@Override
 	public double getLoad() {
-
-		return (this.used+1.0F)/(this.total+1.0F)*100;
+		double x=(this.used*1.0)/(this.total*1.0)*100;
+		return x;
 	}
 
 	@Override
@@ -86,18 +87,19 @@ public class Network implements Device {
 
 	@Override
 	public void monitor() {
-		System.out.format("%10s %10s %10s %8s\n", 
-				"total(Mbps)","used(Mbps)","free(Mbps)","use%");
-		System.out.println(this);
+		INFO(String.format("%11s %10s %10s %8s", 
+				"total(Mbps)","used(Mbps)","free(Mbps)","use%"));
+		INFO(this);
 	}
 
 	@Override
 	public void info() {
-		System.out.println(this);
+		INFO(this);
 	}
 	public String toString(){
-		return String.format("[%10d %10d %10d %7.2f%%]"
+		String s= String.format("[%10d %10d %10d %7.2f%%]"
 				, total,used,free,getLoad());
+		return s;
 	}
 	public int getTotal(){
 		return total;

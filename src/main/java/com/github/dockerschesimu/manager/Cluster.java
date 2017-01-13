@@ -3,8 +3,8 @@ package com.github.dockerschesimu.manager;
 import static com.github.dockerschesimu.constant.DeviceConstants.DEVICE_LEVEL_HIGH;
 import static com.github.dockerschesimu.constant.DeviceConstants.DEVICE_LEVEL_LOW;
 import static com.github.dockerschesimu.constant.DeviceConstants.DEVICE_LEVEL_MID;
+import static com.github.dockerschesimu.tools.BaseLogger.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,30 +28,30 @@ public class Cluster {
 	private boolean isInit=false;
 	
 //	public Cluster(){
-//		System.out.println("------------集群 开始 创建------------");
-//		System.out.println("------------集群 结束 创建------------");
+//		INFO("------------集群 开始 创建------------");
+//		INFO("------------集群 结束 创建------------");
 //		info();
 //	}
 	public Cluster(int hostNum){
-		System.out.println("------------集群 开始 创建------------");
+		INFO("------------------集群 开始 创建------------------");
 		this.hostNum=hostNum;
 		this.hmid=hostNum;
-		hosts=HostFactory.simpleCreate(hostNum);
-		System.out.println("------------集群 结束 创建------------");
+		hosts=HostFactory.simpleCreate(hostNum);		
 		info();
+		INFO("------------------集群 结束 创建------------------\n");
 	}
 	public Cluster(int low,int mid,int high){		
-		System.out.println("------------集群 开始 创建------------");
+		INFO("------------------集群 开始 创建------------------");
 		this.hlow=low;
 		this.hmid=mid;
 		this.hhigh=high;
 		this.hostNum=low+mid+high;
 		hosts=HostFactory.randomCreate(hostNum, low,mid,high);	
 		info();
-		System.out.println("------------集群 结束 创建------------");
+		INFO("------------------集群 结束 创建------------------\n");
 	}
 	public Cluster(Host...hosts){
-		System.out.println("------------集群 开始 创建------------");
+		INFO("------------------集群 开始 创建------------------");
 		this.hosts=Arrays.asList(hosts);
 		this.hostNum=hosts.length;
 		for(Host host:hosts){
@@ -65,27 +65,27 @@ public class Cluster {
 			}
 		}
 		info();
-		System.out.println("------------集群 结束 创建------------");
+		INFO("------------------集群 结束 创建------------------\n");
 		
 	}
 	public void init(){
-		System.out.println("------------集群 开始 初始化------------");
+		INFO("------------------集群 开始 初始化-----------------");
 		HostFactory.init(hosts);
 		isInit=true;
 		monitor();
-		System.out.println("------------集群 结束 初始化------------");		
+		INFO("------------------集群 结束 初始化-----------------\n");		
 	}
 	public void init(double[][] params){
-		System.out.println("------------集群 开始 初始化------------");
+		INFO("------------------集群 开始 初始化-----------------");
 		HostFactory.init(hosts,params);
 		isInit=true;
 		monitor();
-		System.out.println("------------集群 结束 初始化------------");		
+		INFO("------------------集群 结束 初始化-----------------\n");		
 	}
 	public boolean doTasks(int[] sche,List<Task> tasks,int type){
-		System.out.println("------------集群 开始 执行任务------------");
+		//INFO("------------集群 开始 执行任务------------");
 		if(sche.length!=tasks.size()){
-			System.out.println("Error:任务分配列表长度与任务组长度不一致! "
+			ERROR("任务分配列表长度与任务组长度不一致! "
 					+ "sche.len="+sche.length+" tasks.size="+tasks.size());
 			return false;
 		}
@@ -96,56 +96,56 @@ public class Cluster {
 			Task taski=tasks.get(i);
 			int resi=0;
 			if((resi=doTask(hi,taski,type))!=0){
-				System.out.println("------------集群 失败 执行任务------------");
+				ERROR("------------集群 失败 执行任务------------");
 				pDoTaskError(hi,i,resi,taski);
 				return false;
 			}
 		}
-		System.out.println("------------集群 结束 执行任务------------");
+		//INFO("------------集群 结束 执行任务------------");
 		return true;
 	}
 	public void recover(){
-		System.out.println("------------集群 开始 复原------------");
+		//INFO("------------集群 开始 复原------------");
 		for(int i=0;i<hosts.size();i++){
 			int res=hosts.get(i).recover();
 			if(res<0){
-				System.out.println("------------集群 失败 复原------------");
+				ERROR("------------集群 失败 复原------------");
 				pRecoverError(i,res);
 			}
 		}
-		monitor();
-		System.out.println("------------集群 结束 复原------------");
+		//monitor();
+		//INFO("------------集群 结束 复原------------");
 	}
 	private void pDoTaskError(int hi,int taski,int resi,Task task){
 		StringBuffer err=new StringBuffer();
 		Host host=hosts.get(hi);
-		err.append("Error: do task fail! hosti="+hi+" taski="+taski);		
+		err.append("do task fail! hosti="+hi+" taski="+taski);		
 		switch(resi){
 		case 1:
 			err.append("task-->cpu "+task.pCpu());
-			System.out.println(err);
+			ERROR(err);
 			host.mCpu();
 			break;
 		case 2:
 			err.append("task-->mem "+task.pMem());
-			System.out.println(err);
+			ERROR(err);
 			host.mMem();
 			break;
 		case 3:
 			err.append("task-->disk "+task.pDisk());
-			System.out.println(err);
+			ERROR(err);
 			host.mDisk();
 			break;
 		case 4:
 			err.append("task-->net "+task.pNet());
-			System.out.println(err);
+			ERROR(err);
 			host.mNet();
 			break;
 		}		
 	}
 	private void pRecoverError(int hi,int res){
 		StringBuffer err=new StringBuffer();
-		err.append("Error: host recover fail! hosti="+hi);
+		err.append("host recover fail! hosti="+hi);
 		switch(res){
 		case -2:
 			err.append("cpu recover fail! cpu recoverI="
@@ -164,7 +164,7 @@ public class Cluster {
 					+hosts.get(hi).getNet().getRecoverI());
 			break;
 		}
-		System.out.println(err);
+		ERROR(err);
 	}
 	private int doTask(int hi,Task taski,int type){
 		Host host=hosts.get(hi);
@@ -216,35 +216,35 @@ public class Cluster {
 		return loads;
 	}
 	public void info(){
-		System.out.println(this);
+		INFO(this);
 	}
 	public void mCpu(){
-		System.out.println("Cluster CPU monitor:");
+		INFO("Cluster CPU monitor:");
 		for(Host host:hosts){
 			host.mCpu();
 		}
 	}
 	public void mMem(){
-		System.out.println("Cluster MEM monitor:");
+		INFO("Cluster MEM monitor:");
 		for(Host host:hosts){
 			host.mMem();
 		}
 	}
 	public void mDisk(){
-		System.out.println("Cluster DISK monitor:");
+		INFO("Cluster DISK monitor:");
 		for(Host host:hosts){
 			host.mDisk();
 		}
 	}
 	public void mNet(){
-		System.out.println("Cluster NET monitor:");
+		INFO("Cluster NET monitor:");
 		for(Host host:hosts){
 			host.mNet();
 		}
 	}
 	public void monitor(){
-		System.out.println("Cluster All monitor:");
-		for(Host host:hosts){
+		INFO("Cluster All monitor:");
+		for(Host host:hosts){			
 			host.monitor();
 		}
 	}
