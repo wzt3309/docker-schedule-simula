@@ -1,8 +1,9 @@
-#目录
+﻿#目录
 /target/
 /.settings/
 /.git
 /logs
+/bin
 
 #文件
 .classpath
