@@ -32,6 +32,8 @@ public class Main {
 				new GeneticAlgorithm(geneSize,geneFraglen,
 						geneDecMin,geneDecMax,func);					
 		gal.caculte();													//执行算法
+		
+		
 		/**
 		 * ouput
 		 * 控制台输出

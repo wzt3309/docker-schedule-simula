@@ -28,7 +28,7 @@ public class Task {
 	/**
 	 * 网络相关
 	 */
-	private int needNet;			//需要的网络带宽
+	private float needNet;			//需要的网络带宽
 	
 	private String lev;
 	
@@ -76,7 +76,7 @@ public class Task {
 	 * @param needNet
 	 */
 	public Task(int needThreadNum, float testFrequence, double testCoreUse, int needMemory, int needWaitt,
-			int needChunk, int needNet,String lev) {
+			int needChunk, float needNet,String lev) {
 		super();
 		this.needThreadNum = needThreadNum;
 		this.testFrequence = testFrequence;
@@ -123,10 +123,10 @@ public class Task {
 	public void setNeedChunk(int needChunk) {
 		this.needChunk = needChunk;
 	}
-	public int getNeedNet() {
+	public float getNeedNet() {
 		return needNet;
 	}
-	public void setNeedNet(int needNet) {
+	public void setNeedNet(float needNet) {
 		this.needNet = needNet;
 	}	
 	public String getLev() {

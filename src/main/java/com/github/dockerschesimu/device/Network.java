@@ -10,10 +10,10 @@ import static com.github.dockerschesimu.tools.BaseLogger.*;
 public class Network implements Device {
 	
 	private final int total;	//总带宽
-	private int	used;			//被使用的带宽
-	private int free;			//空闲带宽
+	private float used;			//被使用的带宽
+	private float free;			//空闲带宽
 	
-	private List<Integer> recoverUsed=new ArrayList<>();	//记录检查点
+	private List<Float> recoverUsed=new ArrayList<>();		//记录检查点
 	private int recoverI=0;									//已记录几个检查点
 
 	public Network(){
@@ -35,7 +35,7 @@ public class Network implements Device {
 	}
 	@Override
 	public boolean doTask(Task task) {
-		int needNet=task.getNeedNet();
+		float needNet=task.getNeedNet();
 		if(needNet>free){
 			return false;
 		}else{
@@ -97,14 +97,14 @@ public class Network implements Device {
 		INFO(this);
 	}
 	public String toString(){
-		String s= String.format("[%10d %10d %10d %7.2f%%]"
+		String s= String.format("[%10d %10f %10f %7.2f%%]"
 				, total,used,free,getLoad());
 		return s;
 	}
 	public int getTotal(){
 		return total;
 	}
-	private void malloc(int used) {		
+	private void malloc(float used) {		
 		this.used+=used;
 		this.free=this.total-this.used;
 	}

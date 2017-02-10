@@ -34,6 +34,7 @@ public class TaskConstants {
 	public static final int RES_LEVEL_LOW=1;					//资源使用等级 低
 	public static final int RES_LEVEL_MID=2;					//资源使用等级 中
 	public static final int RES_LEVEL_HIGH=3;					//资源使用等级 高
+	public static final int TASK_ALL=0;							//完整任务
 	public static final int TASK_CPU=1;							//cpu任务
 	public static final int TASK_MEM=2;							//mem任务
 	public static final int TASK_DISK=3;						//disk任务

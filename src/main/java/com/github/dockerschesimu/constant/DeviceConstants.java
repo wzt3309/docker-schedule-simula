@@ -21,8 +21,8 @@ public class DeviceConstants {
 	public static final int MIN_MEM_TOTAL=1;					//最小内存为2^1G
 	
 	//-------------------------------硬盘相关常量-------------------------------//
-	public static final int DEFAULT_SATA_RPM=7200;				//默认机械硬盘转速7200r/s
-	public static final int DEFAULT_SATA_MTR=210;				//默认机械硬盘最大持续传输率210MB/s
+	public static final int DEFAULT_SATA_RPM=5600;				//默认机械硬盘转速5600r/s
+	public static final int DEFAULT_SATA_MTR=107;				//默认机械硬盘最大持续传输率107MB/s
 	public static final int DEFAULT_CHUNK_SIZE=4;				//默认随机读写IO块大小
 	public static final float DEFAULT_SATA_AAT=5F;				//默认机械硬盘平均选址时间5ms
 	public static final int MAX_SATA_RPM=15;					//最大机械硬盘rpm15*1000

@@ -57,7 +57,7 @@ public class Disk implements Device{
 	public boolean doTask(Task task) {
 		int waitt=task.getNeedWaitt();
 		int chunk=task.getNeedChunk();
-		if(waitt>0&&chunk>0){
+		if(waitt>=0&&chunk>=0){
 			taskIO(waitt, chunk);
 			return true;
 		}
@@ -120,7 +120,11 @@ public class Disk implements Device{
 	 * @return
 	 */
 	private void taskIO(int waitt,int chunk){
-		this.use+=iops(waitt,chunk)/maxiops(chunk)*100;
+		if(waitt==0&&chunk==0){
+			this.use+=0;
+		}else{
+			this.use+=iops(waitt,chunk)/maxiops(chunk)*100;
+		}		
 		if(this.use>100)
 			this.use=100F;		
 	
