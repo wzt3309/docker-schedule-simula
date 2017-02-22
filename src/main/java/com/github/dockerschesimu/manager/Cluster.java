@@ -82,6 +82,18 @@ public class Cluster {
 		monitor();
 		INFO("------------------集群 结束 初始化-----------------\n");		
 	}
+	public int doTask(int hi,Task taski,int type){
+		Host host=hosts.get(hi);
+		int res=-1;
+		switch(type){
+		case 1:res=host.doCpuTask(taski);break;
+		case 2:res=host.doMemTask(taski);break;
+		case 3:res=host.doDiskTask(taski);break;
+		case 4:res=host.doNetTask(taski);break;
+		default:res=host.doTask(taski);break;
+		}
+		return res;
+	}
 	public boolean doTasks(int[] sche,List<Task> tasks,int type){
 		//INFO("------------集群 开始 执行任务------------");
 		if(sche.length!=tasks.size()){
@@ -116,7 +128,7 @@ public class Cluster {
 		//monitor();
 		//INFO("------------集群 结束 复原------------");
 	}
-	private void pDoTaskError(int hi,int taski,int resi,Task task){
+	public void pDoTaskError(int hi,int taski,int resi,Task task){
 		StringBuffer err=new StringBuffer();
 		Host host=hosts.get(hi);
 		err.append("do task fail! hosti="+hi+" taski="+taski);		
@@ -165,20 +177,19 @@ public class Cluster {
 			break;
 		}
 		ERROR(err);
-	}
-	private int doTask(int hi,Task taski,int type){
-		Host host=hosts.get(hi);
-		int res=-1;
-		switch(type){
-		case 1:res=host.doCpuTask(taski);break;
-		case 2:res=host.doMemTask(taski);break;
-		case 3:res=host.doDiskTask(taski);break;
-		case 4:res=host.doNetTask(taski);break;
-		default:res=host.doTask(taski);break;
+	}	
+	public double[] getAllLoad(int i){
+		if(i>=hostNum){
+			ERROR("node i >= hostNum");
+			return null;
 		}
-		return res;
+		double[] allLoad = new double[4];
+		allLoad[0] = hosts.get(i).getCpu().getLoad();
+		allLoad[1] = hosts.get(i).getMem().getLoad();
+		allLoad[2] = hosts.get(i).getDisk().getLoad();
+		allLoad[3] = hosts.get(i).getNet().getLoad();
+		return allLoad;
 	}
-	
 	public double[][] getAllLoad(){
 		double[][] allLoads=new double[4][hosts.size()];
 		allLoads[0]=getCpuLoad();
