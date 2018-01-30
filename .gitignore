@@ -1,12 +1,18 @@
-﻿#目录
+﻿# 目录
 /target/
 /.settings/
 /.git
 /logs
 /bin
+/out
+/build
+/.idea
+/.gradle
 
-#文件
+# 文件
 .classpath
 .project
 .settings
 .*.swp
+.iml
+*.class
