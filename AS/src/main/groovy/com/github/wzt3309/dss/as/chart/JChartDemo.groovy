@@ -1,7 +1,7 @@
 /**
  * 使用JFreeChart画出折线图
  */
-package com.github.wzt3309.dss.aca
+package com.github.wzt3309.dss.as.chart
 
 import org.jfree.chart.ChartFactory
 import org.jfree.chart.ChartUtilities
@@ -141,7 +141,11 @@ static void save(JFreeChart chart, String outPath, int weight, int height) {
     file.createNewFile()
     ChartUtilities.saveChartAsJPEG(file, 1f, chart, weight, height)
 }
-
-
-save(createChart(createDataset(2, 1, 10)),'.' ,800, 400)
+/**
+ * run()
+ */
+save(createChart(createDataset(2, 1, 10)),
+        '.' ,
+        800,
+        400)
 
