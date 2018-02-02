@@ -12,6 +12,13 @@ class Task {
         rio = [wait, chunk]
         rnet = [net]
     }
+
+
+    @Override
+    String toString() {
+       sprintf('%1.1f %1.2f %6s %3d %3d %6s', rcpu.hz, rcpu.used,
+               Utils.bytes2Str(rmem.val), rio.wait, rio.chunk, Utils.bytes2Str(rnet.val))
+    }
 }
 
 class RCpu {

@@ -30,10 +30,22 @@ class Utils {
         return v
     }
 
-    static int roulette(float[] p) {
+    static String bytes2Str(final a) {
+        if (a == 0) return '0B'
+        def res
+        long h = Long.highestOneBit(a)
+        long tz = Long.numberOfTrailingZeros(h)
+        if (tz < 10) res = a + 'B'
+        else if (tz >= 10 && tz < 20) res = a / KB + 'KB'
+        else if (tz >= 20 && tz < 30) res = a / MB + 'MB'
+        else if (tz >= 30 && tz < 40) res = a / GB + 'GB'
+        else res = a / TB + 'TB'
+    }
+
+    static int roulette(p) {
         float pos = new Random().nextFloat()
         float sum = 0
-        for (int i = 0; i < p.length; i++) {
+        for (int i = 0; i < p.size(); i++) {
             sum += p[i]
             if (sum >= pos) {
                 return i

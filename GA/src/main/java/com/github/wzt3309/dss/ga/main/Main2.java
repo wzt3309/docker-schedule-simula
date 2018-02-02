@@ -20,6 +20,7 @@ import com.github.wzt3309.dss.ga.device.Memory;
 import com.github.wzt3309.dss.ga.device.Network;
 import com.github.wzt3309.dss.ga.manager.Cluster;
 import com.github.wzt3309.dss.ga.manager.Task;
+import com.github.wzt3309.dss.ga.tools.BaseLogger;
 
 public class Main2 {
 
@@ -84,9 +85,13 @@ public class Main2 {
 			FitnessFunction func=new DockerCluFunc(cluster,tasks,TASK_ALL);	//适应度计算函数	
 			GeneticAlgorithm gal=											//遗传算法
 					new GeneticAlgorithm(geneSize,geneFraglen,
-							geneDecMin,geneDecMax,func);					
+							geneDecMin,geneDecMax,func);
+			long start = System.currentTimeMillis();
 			gal.caculte();													//执行算法
-			
+			long end = System.currentTimeMillis();
+			long a = end - start;
+            BaseLogger.INFO(a);
+
 			SpreadAlgorithm spread = new SpreadAlgorithm(cluster,24,func);
 			spread.caculte();
 	}

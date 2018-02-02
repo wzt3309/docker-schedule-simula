@@ -23,6 +23,13 @@ class Node {
         net = [nt, na]
     }
 
+    def reset() {
+        cpu.init()
+        mem.init()
+        io.init()
+        net.init()
+    }
+
     def handle(Task task) {
         cpu.handle(task.rcpu)
         mem.handle(task.rmem)
@@ -42,7 +49,7 @@ class Node {
 
     @Override
     String toString() {
-        sprintf('%.3f' * 3, cpu.used, mem.used, io.used, net.used)
+        sprintf('%.3f ' * 4, cpu.used, mem.used, io.used, net.used)
     }
 }
 
@@ -50,12 +57,18 @@ class Node {
 class Cpu {
     final def core     // 逻辑核心数
     final def hz       // 主频
+    final def initUsed
     def used           // 使用率0.0~1.0
 
     Cpu(core, hz, used) {
         this.core = core
         this.hz = hz
-        this.used = used
+        this.initUsed = used
+        init()
+    }
+
+    def init() {
+        used = initUsed
     }
 
     def handle(RCpu rcpu) {
@@ -71,12 +84,18 @@ class Cpu {
 @AutoClone
 class Mem {
     final def total        // 单位字节
+    final def initAvail
     def avail              // 未被使用的字节
     def used
 
     Mem(total, avail) {
         this.total = Utils.str2Bytes(total)
-        this.avail = Utils.str2Bytes(avail)
+        this.initAvail = Utils.str2Bytes(avail)
+        init()
+    }
+
+    def init() {
+        avail = initAvail
     }
 
     def handle(RMem rmem) {
@@ -98,13 +117,19 @@ class IO {
     final def rpm     // 硬盘转速
     final def mtr     // 硬盘最大持续传输速率
     final def aat     // 硬盘平均寻址时间
+    final def initUsed
     def used
 
     IO(rpm, mtr, aat, used) {
         this.rpm = rpm
         this.mtr = mtr
         this.aat = aat
-        this.used = used
+        this.initUsed = used
+        init()
+    }
+
+    def init() {
+        used = initUsed
     }
 
     def handle(RIO rio) {
@@ -127,12 +152,18 @@ class IO {
 @AutoClone
 class Net {
     final def total
+    final def initAvail
     def avail
     def used
 
     Net(total, avail) {
-        this.total = total
-        this.avail = avail
+        this.total = Utils.str2Bytes(total)
+        this.initAvail = Utils.str2Bytes(avail)
+        init()
+    }
+
+    def init() {
+        avail = initAvail
     }
 
     def handle(RNet rnet) {

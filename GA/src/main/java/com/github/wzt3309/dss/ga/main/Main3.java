@@ -28,25 +28,25 @@ public static void main(String[] args) {
 		Host host1 =
 				new Host(new Cpu(1,2.8F),
 				new Memory(1000000),
-				new Disk(),
+				new Disk(107, 5, 0),
 				new Network(1),DEVICE_LEVEL_LOW);
 		Host host2 = 
 				new Host(new Cpu(2,2.8F), 
 				new Memory(2000000), 
-				new Disk(), 
+				new Disk(200, 5, 0),
 				new Network(2),DEVICE_LEVEL_MID);
 		Host host3 = 
 				new Host(new Cpu(4,2.8F), 
 				new Memory(4000000), 
-				new Disk(), 
+				new Disk(250, 5, 0),
 				new Network(4),DEVICE_LEVEL_MID);
 		
 		Cluster cluster = new Cluster(host1,host2,host3);
 		
-		Task task1 = new Task(1,2.8F,15.0F,1000,0,0,0,"high cpu");
-		Task task2 = new Task(1,2.8F,1.0F,100000,0,0,0,"high mem");
-		Task task3 = new Task(1,2.8F,3.0F,4000,DEF_NEED_WAITT,DEF_NEED_CHUNK,0,"high io");
-		Task task4 = new Task(1,2.8F,1.0F,2000,0,0,0.1F,"high net");
+		Task task1 = new Task(1,2.8F,15.0F,20000,300,300,0,"high cpu");
+		Task task2 = new Task(1,2.8F,1.0F,100000,300,300,0,"high mem");
+		Task task3 = new Task(1,2.8F,3.0F,30000,100,100,0,"high io");
+		Task task4 = new Task(1,2.8F,1.0F,40000,300,300,0.1F,"high net");
 		
 		List<Task> tasks = new ArrayList<>();
 		int[] taskNum = new int[]{6,6,6,6};
@@ -84,9 +84,12 @@ public static void main(String[] args) {
 			FitnessFunction func=new DockerCluFunc(cluster,tasks,TASK_ALL);	//适应度计算函数	
 			GeneticAlgorithm gal=											//遗传算法
 					new GeneticAlgorithm(geneSize,geneFraglen,
-							geneDecMin,geneDecMax,func);					
+							geneDecMin,geneDecMax,func);
+			long start = System.currentTimeMillis();
 			gal.caculte();													//执行算法
-			
+			long end = System.currentTimeMillis();
+			long a = end - start;
+			System.out.println(a);
 			SpreadAlgorithm spread = new SpreadAlgorithm(cluster,24,func);
 			spread.caculte();
 			
